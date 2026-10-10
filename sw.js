@@ -9,14 +9,17 @@
    below is an extra safety net on top of that.
 ========================================================== */
 
-const CACHE_NAME = 'grda-hub-v1';
+const CACHE_NAME = 'grda-hub-v2';
 
 const HUB_SHELL_FILES = [
     '/',
     '/index.html',
     '/style.css',
     '/app.js',
-    '/manifest.json'
+    '/manifest.json',
+    '/assets/icon-192.png',
+    '/assets/icon-512.png',
+    '/assets/icon-maskable-512.png'
 ];
 
 self.addEventListener('install', (event) => {
