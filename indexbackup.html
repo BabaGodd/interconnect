@@ -1,0 +1,521 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#080e17">
+
+    <title>GRDA | Interconnectivity Plan</title>
+
+    <meta
+        name="description"
+        content="Explore Ghana's Eastern, Central and Western railway corridors through the GRDA digital visualization platform."
+    >
+
+    <!-- =====================================================
+         PWA
+         ====================================================== -->
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="GRDA Corridors">
+
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#corridors">Skip introduction</a>
+
+    <!-- CINEMATIC OPENING -->
+    <section id="intro" class="intro" aria-label="GRDA introduction">
+        <div class="intro-grid" aria-hidden="true"></div>
+        <div class="intro-glow" aria-hidden="true"></div>
+
+        <div class="intro-content">
+            <div class="brand-lockup">
+                <div class="brand-seal">
+                    <img
+                        src="assets/GRDA-Logo.jpg"
+                        alt=""
+                        onerror="this.style.display='none'"
+                    >
+                    <span class="seal-fallback" aria-hidden="true">G</span>
+                </div>
+
+                <p class="brand-acronym">GRDA</p>
+                <p class="brand-name">
+                    GHANA RAILWAY<br>
+                    DEVELOPMENT AUTHORITY
+                </p>
+            </div>
+
+            <p class="intro-eyebrow">GRDA Interconnectivity Plan</p>
+
+            <h1>
+                Connecting Ghana.<br>
+                <span>Powering Progress.</span>
+            </h1>
+
+            <p class="intro-description">
+                Three corridors. One connected vision.
+            </p>
+
+            <div class="intro-map" aria-label="Stylized map of Ghana with illustrative rail routes">
+                <svg
+                    id="ghana-map"
+                    viewBox="0 0 360 410"
+                    role="img"
+                    aria-labelledby="map-title map-description"
+                >
+                    <title id="map-title">Ghana railway network introduction</title>
+                    <desc id="map-description">
+                        A stylized outline of Ghana with animated illustrative
+                        connections representing the three railway corridors.
+                        Lines are decorative and are not surveyed route alignments.
+                    </desc>
+
+                    <defs>
+                        <linearGradient id="ghana-fill" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#fcd116" stop-opacity=".20"/>
+                            <stop offset="100%" stop-color="#fcd116" stop-opacity=".025"/>
+                        </linearGradient>
+
+                        <filter id="route-glow" x="-100%" y="-100%" width="300%" height="300%">
+                            <feGaussianBlur stdDeviation="4" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+
+                        <clipPath id="ghana-clip">
+                            <path id="ghana-outline" d="
+                                M 320.6 319.0
+                                L 214.9 352.8
+                                L 177.4 372.6
+                                L 116.6 389.4
+                                L 56.6 373.0
+                                L 59.6 350.2
+                                L 30.4 300.4
+                                L 48.0 235.1
+                                L 76.4 186.5
+                                L 58.5 104.3
+                                L 49.3 60.7
+                                L 50.9 27.9
+                                L 168.0 25.2
+                                L 197.8 29.4
+                                L 219.5 20.1
+                                L 250.7 24.7
+                                L 245.7 42.7
+                                L 273.9 72.5
+                                L 273.8 114.5
+                                L 280.2 160.1
+                                L 297.1 181.2
+                                L 282.2 233.2
+                                L 287.6 262.0
+                                L 305.5 298.7
+                                Z
+                            "/>
+                        </clipPath>
+                    </defs>
+
+                    <path
+                        class="ghana-fill"
+                        d="
+                            M 320.6 319.0 L 214.9 352.8 L 177.4 372.6
+                            L 116.6 389.4 L 56.6 373.0 L 59.6 350.2
+                            L 30.4 300.4 L 48.0 235.1 L 76.4 186.5
+                            L 58.5 104.3 L 49.3 60.7 L 50.9 27.9
+                            L 168.0 25.2 L 197.8 29.4 L 219.5 20.1
+                            L 250.7 24.7 L 245.7 42.7 L 273.9 72.5
+                            L 273.8 114.5 L 280.2 160.1 L 297.1 181.2
+                            L 282.2 233.2 L 287.6 262.0 L 305.5 298.7 Z
+                        "
+                    />
+
+                    <path
+                        class="ghana-outline"
+                        pathLength="100"
+                        d="
+                            M 320.6 319.0 L 214.9 352.8 L 177.4 372.6
+                            L 116.6 389.4 L 56.6 373.0 L 59.6 350.2
+                            L 30.4 300.4 L 48.0 235.1 L 76.4 186.5
+                            L 58.5 104.3 L 49.3 60.7 L 50.9 27.9
+                            L 168.0 25.2 L 197.8 29.4 L 219.5 20.1
+                            L 250.7 24.7 L 245.7 42.7 L 273.9 72.5
+                            L 273.8 114.5 L 280.2 160.1 L 297.1 181.2
+                            L 282.2 233.2 L 287.6 262.0 L 305.5 298.7 Z
+                        "
+                    />
+
+                    <g class="map-terrain" clip-path="url(#ghana-clip)">
+                        <path d="M 45 120 L 280 240 M 50 175 L 260 300
+                                 M 65 65 L 220 355 M 90 20 L 115 380
+                                 M 155 15 L 170 370 M 220 30 L 80 280
+                                 M 270 110 L 95 335"
+                              fill="none"/>
+
+                        <path d="M 75 150 Q 145 110 240 165
+                                 M 80 225 Q 155 175 240 235
+                                 M 95 290 Q 150 260 215 305"
+                              fill="none"/>
+                    </g>
+
+                    <g class="rail-network" clip-path="url(#ghana-clip)">
+                        <path class="rail-track eastern-track"
+                              pathLength="100"
+                              d="M 228 326 Q 218 270 209 222 T 187 160
+                                 T 155 104 T 143 45"/>
+
+                        <path class="rail-track central-track"
+                              pathLength="100"
+                              d="M 228 326 Q 195 289 172 247
+                                 T 142 190 T 128 136 T 143 45"/>
+
+                        <path class="rail-track western-track"
+                              pathLength="100"
+                              d="M 228 326 Q 179 310 143 285
+                                 T 100 225 T 92 158 T 143 45"/>
+                    </g>
+
+                    <g class="map-nodes">
+                        <circle cx="228" cy="326" r="5"/>
+                        <circle cx="143" cy="45" r="5"/>
+                        <circle cx="172" cy="247" r="4"/>
+                        <circle cx="100" cy="225" r="4"/>
+                    </g>
+                </svg>
+            </div>
+
+            <button id="skip-intro" class="skip-intro" type="button">
+                SKIP INTRO <span aria-hidden="true">↗</span>
+            </button>
+        </div>
+
+        <div class="intro-footer">
+            <span>GHANA RAILWAY DEVELOPMENT AUTHORITY</span>
+            <div class="loading-block" aria-live="polite">
+                <div class="loading-meta">
+                    <span id="loading-status">INITIALIZING NETWORK</span>
+                    <span id="loading-percent">00%</span>
+                </div>
+
+                <div
+                    class="loading-track"
+                    role="progressbar"
+                    aria-label="Opening animation progress"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                    id="loading-progress"
+                >
+                    <span id="loading-bar"></span>
+                </div>
+            </div>
+            <span>RAIL · CONNECTIVITY · PROGRESS</span>
+        </div>
+    </section>
+
+
+    <!-- MAIN HUB -->
+    <main id="hub" class="hub" inert>
+        <header class="site-header">
+            <a class="header-brand" href="#home" aria-label="GRDA corridor hub home">
+                <img class="header-mark" src="assets/GRDA-Logo.jpg" alt="">
+                <span>
+                    <strong>GRDA</strong>
+                    <small>GHANA RAILWAY DEVELOPMENT AUTHORITY</small>
+                </span>
+            </a>
+
+            <span class="header-status">
+                <span class="status-dot"></span>
+                Interconnectivity Plan 
+            </span>
+        </header>
+
+        <section id="home" class="hero">
+            <div class="hero-copy">
+                <p class="eyebrow">
+                    <span class="eyebrow-line"></span>
+                    GHANA'S RAILWAY FUTURE
+                </p>
+
+                <h2>
+                    Connecting Ghana.<br>
+                    <span>Powering Progress.</span>
+                </h2>
+
+                <p class="hero-description">
+                    Explore the railway corridors shaping national
+                    connectivity through immersive three-dimensional
+                    visualizations.
+                </p>
+
+                <a class="hero-cta" href="#corridors">
+                    <span class="cta-icon" aria-hidden="true">↓</span>
+                    <span>EXPLORE THE CORRIDORS</span>
+                </a>
+            </div>
+
+            <div class="hero-map-panel" aria-hidden="true">
+                <div class="panel-label">WESTERN CORRIDOR</div>
+
+                <svg viewBox="0 0 360 410">
+                    <path class="hero-ghana-fill"
+                          d="M 320.6 319.0 L 214.9 352.8 L 177.4 372.6
+                             L 116.6 389.4 L 56.6 373.0 L 59.6 350.2
+                             L 30.4 300.4 L 48.0 235.1 L 76.4 186.5
+                             L 58.5 104.3 L 49.3 60.7 L 50.9 27.9
+                             L 168.0 25.2 L 197.8 29.4 L 219.5 20.1
+                             L 250.7 24.7 L 245.7 42.7 L 273.9 72.5
+                             L 273.8 114.5 L 280.2 160.1 L 297.1 181.2
+                             L 282.2 233.2 L 287.6 262.0 L 305.5 298.7 Z"/>
+
+                    <path class="hero-ghana-line"
+                          d="M 320.6 319.0 L 214.9 352.8 L 177.4 372.6
+                             L 116.6 389.4 L 56.6 373.0 L 59.6 350.2
+                             L 30.4 300.4 L 48.0 235.1 L 76.4 186.5
+                             L 58.5 104.3 L 49.3 60.7 L 50.9 27.9
+                             L 168.0 25.2 L 197.8 29.4 L 219.5 20.1
+                             L 250.7 24.7 L 245.7 42.7 L 273.9 72.5
+                             L 273.8 114.5 L 280.2 160.1 L 297.1 181.2
+                             L 282.2 233.2 L 287.6 262.0 L 305.5 298.7 Z"/>
+
+                    <path class="hero-route"
+                          d="M228 326 Q218 270 209 222 T187 160 T155 104 T143 45"/>
+                    <path class="hero-route route-blue"
+                          d="M228 326 Q195 289 172 247 T142 190 T128 136 T143 45"/>
+                    <path class="hero-route route-green"
+                          d="M228 326 Q179 310 143 285 T100 225 T92 158 T143 45"/>
+
+                    <circle class="hero-node" cx="228" cy="326" r="5"/>
+                    <circle class="hero-node" cx="143" cy="45" r="5"/>
+                </svg>
+
+                <div class="map-caption map-caption-top">EASTERN CORRIDOR</div>
+                <div class="map-caption map-caption-bottom">CENTRAL CORRIDOR</div>
+            </div>
+
+            <div class="hero-index" aria-hidden="true">
+                <span>01</span>
+                <span class="index-rule"></span>
+                <span>03 CORRIDORS</span>
+            </div>
+        </section>
+
+
+        <section id="corridors" class="corridors">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">
+                        <span class="eyebrow-line"></span>
+                        THE NATIONAL NETWORK
+                    </p>
+                    <h2>Choose your corridor.</h2>
+                </div>
+
+                <p class="section-note">
+                    Select a corridor to enter its dedicated
+                    3D railway environment.
+                </p>
+            </div>
+
+
+            <div class="corridor-grid">
+
+                <article class="corridor-card eastern">
+                    <div class="card-visual">
+                        <span class="card-number">01 / EASTERN</span>
+                        <svg class="card-route" viewBox="0 0 360 410"
+                             aria-hidden="true">
+                            <path class="route-outline"
+                                  d="M 320.6 319.0 L 214.9 352.8 L 177.4 372.6
+                                     L 116.6 389.4 L 56.6 373.0 L 59.6 350.2
+                                     L 30.4 300.4 L 48.0 235.1 L 76.4 186.5
+                                     L 58.5 104.3 L 49.3 60.7 L 50.9 27.9
+                                     L 168.0 25.2 L 197.8 29.4 L 219.5 20.1
+                                     L 250.7 24.7 L 245.7 42.7 L 273.9 72.5
+                                     L 273.8 114.5 L 280.2 160.1 L 297.1 181.2
+                                     L 282.2 233.2 L 287.6 262.0 L 305.5 298.7 Z"/>
+                            <path class="route-line"
+                                  d="M180 360 Q220 300 245 230 T250 120 Q240 70 200 35"/>
+                            <circle cx="180" cy="360" r="4"/>
+                            <circle cx="200" cy="35" r="4"/>
+                        </svg>
+                        <span class="card-coordinate">SOUTH → NORTH</span>
+                    </div>
+
+                    <div class="card-content">
+                        <p class="card-kicker">CORRIDOR 01</p>
+                        <h3>Eastern Corridor</h3>
+                        <p class="card-endpoints">Tema Port <span>→</span> Paga</p>
+                        <p class="card-description">
+                            A northbound connection from the coast
+                            towards Ghana's northern frontier.
+                        </p>
+
+                        <a class="corridor-link"
+                           data-corridor="eastern"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           href="#configure-eastern">
+                            <span>PREVIEW EASTERN CORRIDOR</span>
+                            <span class="link-arrow" aria-hidden="true">↗</span>
+                        </a>
+                    </div>
+                </article>
+
+
+                <article class="corridor-card central">
+                    <div class="card-visual">
+                        <span class="card-number">02 / CENTRAL</span>
+                        <svg class="card-route" viewBox="0 0 360 410"
+                             aria-hidden="true">
+                            <path class="route-outline"
+                                  d="M 320.6 319.0 L 214.9 352.8 L 177.4 372.6
+                                     L 116.6 389.4 L 56.6 373.0 L 59.6 350.2
+                                     L 30.4 300.4 L 48.0 235.1 L 76.4 186.5
+                                     L 58.5 104.3 L 49.3 60.7 L 50.9 27.9
+                                     L 168.0 25.2 L 197.8 29.4 L 219.5 20.1
+                                     L 250.7 24.7 L 245.7 42.7 L 273.9 72.5
+                                     L 273.8 114.5 L 280.2 160.1 L 297.1 181.2
+                                     L 282.2 233.2 L 287.6 262.0 L 305.5 298.7 Z"/>
+                            <path class="route-line"
+                                  d="M150 365 Q170 300 165 240 T180 160 Q180 90 170 35"/>
+                            <circle cx="150" cy="365" r="4"/>
+                            <circle cx="170" cy="35" r="4"/>
+                        </svg>
+                        <span class="card-coordinate">SOUTH → NORTH</span>
+                    </div>
+
+                    <div class="card-content">
+                        <p class="card-kicker">CORRIDOR 02</p>
+                        <h3>Central Corridor</h3>
+                        <p class="card-endpoints">Accra <span>→</span> Sawla</p>
+                        <p class="card-description">
+                            Explore the proposed central connection
+                            between Accra and northern Ghana.
+                        </p>
+
+                        <a class="corridor-link"
+                           data-corridor="central"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           href="#configure-central">
+                            <span>PREVIEW CENTRAL CORRIDOR</span>
+                            <span class="link-arrow" aria-hidden="true">↗</span>
+                        </a>
+                    </div>
+                </article>
+
+
+                <article class="corridor-card western">
+                    <div class="card-visual">
+                        <span class="card-number">03 / WESTERN</span>
+                        <svg class="card-route" viewBox="0 0 360 410"
+                             aria-hidden="true">
+                            <path class="route-outline"
+                                  d="M 320.6 319.0 L 214.9 352.8 L 177.4 372.6
+                                     L 116.6 389.4 L 56.6 373.0 L 59.6 350.2
+                                     L 30.4 300.4 L 48.0 235.1 L 76.4 186.5
+                                     L 58.5 104.3 L 49.3 60.7 L 50.9 27.9
+                                     L 168.0 25.2 L 197.8 29.4 L 219.5 20.1
+                                     L 250.7 24.7 L 245.7 42.7 L 273.9 72.5
+                                     L 273.8 114.5 L 280.2 160.1 L 297.1 181.2
+                                     L 282.2 233.2 L 287.6 262.0 L 305.5 298.7 Z"/>
+                            <path class="route-line"
+                                  d="M100 365 Q100 310 90 250 T90 180 Q100 100 170 35"/>
+                            <circle cx="100" cy="365" r="4"/>
+                            <circle cx="170" cy="35" r="4"/>
+                        </svg>
+                        <span class="card-coordinate">COAST → NORTHWEST</span>
+                    </div>
+
+                    <div class="card-content">
+                        <p class="card-kicker">CORRIDOR 03</p>
+                        <h3>Western Corridor</h3>
+                        <p class="card-endpoints">Takoradi <span>→</span> Hamile</p>
+                        <p class="card-description">
+                            Follow the western railway connection
+                            from the coast towards the northwest.
+                        </p>
+
+                        <a class="corridor-link"
+                           data-corridor="western"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           href="#configure-western">
+                            <span>PREVIEW WESTERN CORRIDOR</span>
+                            <span class="link-arrow" aria-hidden="true">↗</span>
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+
+        <footer class="site-footer">
+            <a class="footer-brand" href="#home">GRDA</a>
+            <p>GHANA RAILWAY DEVELOPMENT AUTHORITY</p>
+            <p class="footer-note">
+                NATIONAL RAILWAY CORRIDOR VISUALIZATION PLATFORM
+            </p>
+        </footer>
+    </main>
+
+
+    <div id="navigation-overlay" class="navigation-overlay" aria-hidden="true">
+        <div class="transition-mark"></div>
+        <p>PREPARING CORRIDOR</p>
+    </div>
+
+    <noscript>
+        <p class="noscript-message">
+            Please enable JavaScript to experience the GRDA corridor hub.
+        </p>
+    </noscript>
+
+    <!-- =====================================================
+         PWA SERVICE WORKER
+         ====================================================== -->
+
+    <script>
+        if (
+            'serviceWorker' in navigator &&
+            window.location.protocol !== 'file:'
+        ) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker
+                    .register('/sw.js')
+                    .then((registration) => {
+                        console.log(
+                            'GRDA Hub PWA service worker registered:',
+                            registration.scope
+                        );
+                    })
+                    .catch((error) => {
+                        console.error(
+                            'GRDA Hub PWA service worker registration failed:',
+                            error
+                        );
+                    });
+            });
+        } else if (window.location.protocol === 'file:') {
+            console.warn(
+                'GRDA Hub PWA requires an HTTP or HTTPS origin.'
+            );
+        }
+    </script>
+
+</body>
+
+</html>
