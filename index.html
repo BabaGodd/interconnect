@@ -615,14 +615,33 @@
             'serviceWorker' in navigator &&
             window.location.protocol !== 'file:'
         ) {
+            const hadController = Boolean(navigator.serviceWorker.controller);
+            let reloadingForUpdate = false;
+
+            if (hadController) {
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (reloadingForUpdate) {
+                        return;
+                    }
+                    reloadingForUpdate = true;
+                    window.location.reload();
+                });
+            }
+
             window.addEventListener('load', () => {
                 navigator.serviceWorker
-                    .register('/sw.js')
+                    .register('/sw.js', { updateViaCache: 'none' })
                     .then((registration) => {
                         console.log(
                             'GRDA Hub PWA service worker registered:',
                             registration.scope
                         );
+                        return registration.update().catch((error) => {
+                            console.error(
+                                'GRDA Hub PWA service worker update check failed:',
+                                error
+                            );
+                        });
                     })
                     .catch((error) => {
                         console.error(

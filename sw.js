@@ -9,7 +9,8 @@
    below is an extra safety net on top of that.
 ========================================================== */
 
-const CACHE_NAME = 'grda-hub-v2';
+const CACHE_PREFIX = 'grda-hub-';
+const CACHE_NAME = `${CACHE_PREFIX}v3`;
 
 const HUB_SHELL_FILES = [
     '/',
@@ -34,7 +35,10 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((cacheNames) =>
             Promise.all(
                 cacheNames
-                    .filter((name) => name !== CACHE_NAME)
+                    .filter(
+                        (name) =>
+                            name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME
+                    )
                     .map((name) => caches.delete(name))
             )
         )
@@ -55,7 +59,33 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    const isHubShellFile = HUB_SHELL_FILES.includes(url.pathname);
+    if (!isHubShellFile) {
+        return;
+    }
+
+    const cacheKey = new Request(`${url.origin}${url.pathname}`);
+
     event.respondWith(
-        caches.match(event.request).then((cached) => cached || fetch(event.request))
+        fetch(event.request, { cache: 'no-cache' })
+            .then((response) => {
+                if (!response.ok) {
+                    return response;
+                }
+
+                return caches.open(CACHE_NAME)
+                    .then((cache) => cache.put(cacheKey, response.clone()))
+                    .then(() => response, (error) => {
+                        console.error('GRDA Hub cache update failed:', error);
+                        return response;
+                    });
+            })
+            .catch(async () => {
+                const cached = await caches.match(cacheKey);
+                if (cached) {
+                    return cached;
+                }
+                throw new Error(`Network unavailable and no cached copy for ${url.pathname}`);
+            })
     );
 });
