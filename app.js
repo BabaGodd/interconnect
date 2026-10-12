@@ -1,4 +1,3 @@
-
 "use strict";
 
 /* =========================================================
@@ -114,6 +113,12 @@ function finishIntro() {
     intro.classList.add("is-finished");
 
     /*
+     * Start watching for animated corridor maps now that the
+     * hub is visible, so their animation plays when scrolled to.
+     */
+    observeAnimatedCards();
+
+    /*
      * Remove the finished splash from keyboard navigation
      * after its visual transition.
      */
@@ -138,6 +143,177 @@ function startIntro() {
 }
 
 skipButton.addEventListener("click", finishIntro);
+
+
+/* ===================== ANIMATED CARD MAPS ===================== */
+
+/*
+ * Cards marked with data-animate-on-view get an "is-inview"
+ * class the first time they scroll into view. The CSS then
+ * starts their map animation, so visitors see it draw instead
+ * of arriving after it has already finished.
+ */
+function observeAnimatedCards() {
+    const cards = document.querySelectorAll("[data-animate-on-view]");
+
+    if (!("IntersectionObserver" in window)) {
+        cards.forEach(card => card.classList.add("is-inview"));
+        return;
+    }
+
+    const observer = new IntersectionObserver(
+        entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-inview");
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.35 }
+    );
+
+    cards.forEach(card => observer.observe(card));
+}
+
+
+/* ===================== MAP VIEWER ===================== */
+
+/*
+ * Opens a corridor's full-size map on the page itself, centred,
+ * with a Close button (also Esc or a click on the dark area) and a
+ * zoom toggle for reading the small labels. The link's href stays
+ * as a fallback if JavaScript is unavailable.
+ */
+const lightbox = document.getElementById("map-lightbox");
+const lightboxStage = document.getElementById("lightbox-stage");
+const lightboxImg = document.getElementById("lightbox-img");
+const lightboxTitle = document.getElementById("map-lightbox-title");
+const lightboxZoom = document.getElementById("lightbox-zoom");
+const lightboxClose = document.getElementById("lightbox-close");
+
+let lightboxTrigger = null;
+let lightboxHideTimer = null;
+
+function setLightboxZoom(zoomed, focusX = 0.5, focusY = 0.3) {
+    lightbox.classList.toggle("is-zoomed", zoomed);
+    lightboxZoom.textContent = zoomed ? "FIT TO SCREEN" : "ZOOM IN";
+
+    if (zoomed) {
+        /* Scroll so the point that was clicked stays under the viewer's centre. */
+        lightboxStage.scrollLeft =
+            focusX * lightboxImg.offsetWidth - lightboxStage.clientWidth / 2;
+        lightboxStage.scrollTop =
+            focusY * lightboxImg.offsetHeight - lightboxStage.clientHeight / 2;
+    } else {
+        lightboxStage.scrollLeft = 0;
+        lightboxStage.scrollTop = 0;
+    }
+}
+
+function openLightbox(link) {
+    lightboxTrigger = link;
+
+    window.clearTimeout(lightboxHideTimer);
+
+    lightboxTitle.textContent = link.dataset.mapTitle || "Corridor map";
+    lightboxImg.alt = lightboxTitle.textContent;
+    lightboxImg.src = link.getAttribute("href");
+
+    lightbox.hidden = false;
+    setLightboxZoom(false);
+
+    /* Next frame, so the fade-in transition runs. */
+    requestAnimationFrame(() => lightbox.classList.add("is-open"));
+
+    hub.inert = true;
+    document.body.classList.add("lightbox-open");
+
+    lightboxClose.focus();
+}
+
+function closeLightbox() {
+    if (lightbox.hidden) {
+        return;
+    }
+
+    lightbox.classList.remove("is-open");
+    hub.inert = false;
+    document.body.classList.remove("lightbox-open");
+
+    lightboxHideTimer = window.setTimeout(() => {
+        lightbox.hidden = true;
+        lightbox.classList.remove("is-zoomed");
+    }, 260);
+
+    if (lightboxTrigger) {
+        lightboxTrigger.focus();
+    }
+}
+
+document.querySelectorAll(".map-zoom").forEach(link => {
+    link.addEventListener("click", event => {
+        /* Let ctrl/cmd/shift/middle-click still open a new tab. */
+        if (
+            event.button !== 0 ||
+            event.metaKey ||
+            event.ctrlKey ||
+            event.shiftKey ||
+            event.altKey
+        ) {
+            return;
+        }
+
+        event.preventDefault();
+        openLightbox(link);
+    });
+});
+
+lightboxClose.addEventListener("click", closeLightbox);
+
+lightboxZoom.addEventListener("click", () => {
+    setLightboxZoom(!lightbox.classList.contains("is-zoomed"));
+});
+
+lightboxImg.addEventListener("click", event => {
+    const zoomed = lightbox.classList.contains("is-zoomed");
+    const focusX = event.offsetX / lightboxImg.clientWidth;
+    const focusY = event.offsetY / lightboxImg.clientHeight;
+
+    setLightboxZoom(!zoomed, focusX, focusY);
+});
+
+/* A click on the dark area around the map closes the viewer. */
+lightboxStage.addEventListener("click", event => {
+    if (event.target === lightboxStage) {
+        closeLightbox();
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if (lightbox.hidden) {
+        return;
+    }
+
+    if (event.key === "Escape") {
+        closeLightbox();
+        return;
+    }
+
+    /* Keep keyboard focus inside the viewer while it is open. */
+    if (event.key === "Tab") {
+        const first = lightboxZoom;
+        const last = lightboxClose;
+
+        if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    }
+});
 
 
 /* ===================== CORRIDOR NAVIGATION ===================== */
